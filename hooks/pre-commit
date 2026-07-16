@@ -1,0 +1,27 @@
+#!/bin/sh
+
+echo "====================================="
+echo "Running Notebook Converter..."
+echo "====================================="
+
+NOTEBOOKS=$(git diff --cached --name-only -- "*.ipynb")
+
+if [ -z "$NOTEBOOKS" ]; then
+    echo "No notebook staged."
+    exit 0
+fi
+
+python scripts/convert_notebooks.py
+
+STATUS=$?
+
+if [ $STATUS -ne 0 ]; then
+    echo ""
+    echo "Notebook conversion failed."
+    exit 1
+fi
+
+echo ""
+echo "Notebook conversion completed."
+
+exit 0
